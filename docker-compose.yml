@@ -1,7 +1,9 @@
 version: '3'
 
 services:
-  web:
+  geo-jot:
+    image: shayanadc/geo-jot:1.0
+    container_name: geo-jot
     build: .
     ports:
       - "8080:8080"

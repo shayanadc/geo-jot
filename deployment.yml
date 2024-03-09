@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geo-jot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geo-jot
+  template:
+    metadata:
+      labels:
+        app: geo-jot
+    spec:
+      containers:
+      - name: geo-jot
+        image: shayanadc/geo-jot:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
