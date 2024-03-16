@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	auth "geo-jot/Auth"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,7 +13,7 @@ import (
 
 func TestGraphQLHealthEndpoint(t *testing.T) {
 
-	token, _ := GenerateToken(1)
+	token, _ := auth.GenerateToken(1)
 
 	query := `{"query":"{ health }"}`
 
@@ -25,7 +26,7 @@ func TestGraphQLHealthEndpoint(t *testing.T) {
 
 	recorder := httptest.NewRecorder()
 
-	gqlHandler := AuthMiddleware(handler.New(&handler.Config{Schema: GetSchama()}))
+	gqlHandler := auth.AuthMiddleware(handler.New(&handler.Config{Schema: GetSchama()}))
 
 	gqlHandler.ServeHTTP(recorder, req)
 
