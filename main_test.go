@@ -12,6 +12,8 @@ import (
 
 func TestGraphQLHealthEndpoint(t *testing.T) {
 
+	token, _ := GenerateToken(1)
+
 	query := `{"query":"{ health }"}`
 
 	req, err := http.NewRequest("POST", "/graphql", bytes.NewBufferString(query))
@@ -19,19 +21,20 @@ func TestGraphQLHealthEndpoint(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	req.Header.Set("Authorization", token)
+
 	recorder := httptest.NewRecorder()
 
-	gqlHandler := handler.New(&handler.Config{Schema: GetSchama()})
+	gqlHandler := AuthMiddleware(handler.New(&handler.Config{Schema: GetSchama()}))
 
 	gqlHandler.ServeHTTP(recorder, req)
 
 	fmt.Println(recorder.Body.String())
 
-	// Check the HTTP status code
 	if status := recorder.Code; status != http.StatusOK {
 		t.Errorf("Handler returned wrong status code: got %v, want %v", status, http.StatusOK)
 	}
-	// Check the response body
+
 	expectedBody := `{"data":{"health":"checked!"}}`
 	if body := recorder.Body.String(); body != expectedBody {
 		t.Errorf("Handler returned unexpected body: got %v, want %v", body, expectedBody)
