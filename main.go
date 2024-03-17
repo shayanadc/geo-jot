@@ -1,7 +1,7 @@
 package main
 
 import (
-	auth "geo-jot/Auth"
+	auth "geo-jot/auth"
 	"log"
 	"net/http"
 
