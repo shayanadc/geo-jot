@@ -26,7 +26,7 @@ func TestGraphQLHealthEndpoint(t *testing.T) {
 
 	recorder := httptest.NewRecorder()
 
-	gqlHandler := auth.AuthMiddleware(handler.New(&handler.Config{Schema: GetSchama()}))
+	gqlHandler := auth.AuthMiddleware(handler.New(&handler.Config{Schema: GetSchema(SchemaConfig)}))
 
 	gqlHandler.ServeHTTP(recorder, req)
 
