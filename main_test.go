@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	auth "geo-jot/Auth"
+	auth "geo-jot/auth"
 	"net/http"
 	"net/http/httptest"
 	"testing"
