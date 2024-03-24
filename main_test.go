@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	auth "geo-jot/auth"
+	graphql "geo-jot/graphql"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -18,6 +18,7 @@ func TestGraphQLHealthEndpoint(t *testing.T) {
 	query := `{"query":"{ health }"}`
 
 	req, err := http.NewRequest("POST", "/graphql", bytes.NewBufferString(query))
+
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -26,11 +27,9 @@ func TestGraphQLHealthEndpoint(t *testing.T) {
 
 	recorder := httptest.NewRecorder()
 
-	gqlHandler := auth.AuthMiddleware(handler.New(&handler.Config{Schema: GetSchema(SchemaConfig)}))
+	gqlHandler := auth.AuthMiddleware(handler.New(&handler.Config{Schema: graphql.GetSchema(graphql.SchemaConfig)}))
 
 	gqlHandler.ServeHTTP(recorder, req)
-
-	fmt.Println(recorder.Body.String())
 
 	if status := recorder.Code; status != http.StatusOK {
 		t.Errorf("Handler returned wrong status code: got %v, want %v", status, http.StatusOK)
