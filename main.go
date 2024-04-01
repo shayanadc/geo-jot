@@ -1,24 +1,21 @@
 package main
 
 import (
-	auth "geo-jot/auth"
-	graphql "geo-jot/graphql"
-
+	"geo-jot/http_handler"
+	"geo-jot/routes"
 	"log"
 	"net/http"
-
-	"github.com/graphql-go/handler"
 )
 
 func main() {
-	http.Handle("/graphql", auth.AuthMiddleware(handler.New(&handler.Config{
-		Schema: graphql.GetSchema(graphql.SchemaConfig),
-	})))
 
-	http.Handle("/auth", handler.New(&handler.Config{
-		Schema: graphql.GetSchema(graphql.SchemaAuthConfig),
-	}))
+	App()
 
 	log.Println("geo-jot *** gql server is running on http://localhost:8080/graphql")
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func App() {
+
+	http_handler.Router(routes.Routes)
 }

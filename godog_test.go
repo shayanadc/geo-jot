@@ -4,13 +4,12 @@ import (
 	"bytes"
 	"context"
 	auth "geo-jot/auth"
-	graphql "geo-jot/graphql"
+	"geo-jot/http_handler"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/cucumber/godog"
-	"github.com/graphql-go/handler"
 )
 
 var recorder *httptest.ResponseRecorder
@@ -34,9 +33,7 @@ func iSendRequestToWithBody(method, endpoint string, body *godog.DocString) (err
 		req.Header.Set("Authorization", token)
 	}
 
-	gqlHandler := auth.AuthMiddleware(handler.New(&handler.Config{Schema: graphql.GetSchema(graphql.SchemaConfig)}))
-
-	gqlHandler.ServeHTTP(recorder, req)
+	recorder = http_handler.HandlerRecorder("/graphql", req)
 
 	return nil
 }

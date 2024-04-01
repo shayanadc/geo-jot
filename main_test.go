@@ -4,12 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	auth "geo-jot/auth"
-	graphql "geo-jot/graphql"
+	"geo-jot/http_handler"
 	"net/http"
-	"net/http/httptest"
 	"testing"
-
-	"github.com/graphql-go/handler"
 )
 
 func TestGraphQLHealthEndpoint(t *testing.T) {
@@ -26,13 +23,9 @@ func TestGraphQLHealthEndpoint(t *testing.T) {
 
 	req.Header.Set("Authorization", token)
 
-	recorder := httptest.NewRecorder()
+	recoder := http_handler.HandlerRecorder("/graphql", req)
 
-	gqlHandler := auth.AuthMiddleware(handler.New(&handler.Config{Schema: graphql.GetSchema(graphql.SchemaConfig)}))
-
-	gqlHandler.ServeHTTP(recorder, req)
-
-	if status := recorder.Code; status != http.StatusOK {
+	if status := recoder.Code; status != http.StatusOK {
 		t.Errorf("Handler returned wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
@@ -68,11 +61,7 @@ func TestCreateUserEndpoint(t *testing.T) {
 
 	req.Header.Set("Authorization", token)
 
-	recorder := httptest.NewRecorder()
-
-	gqlHandler := auth.AuthMiddleware(handler.New(&handler.Config{Schema: graphql.GetSchema(graphql.SchemaConfig)}))
-
-	gqlHandler.ServeHTTP(recorder, req)
+	recorder := http_handler.HandlerRecorder("/graphql", req)
 
 	if status := recorder.Code; status != http.StatusOK {
 		t.Errorf("Handler returned wrong status code: got %v, want %v", status, http.StatusOK)

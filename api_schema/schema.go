@@ -1,4 +1,4 @@
-package graphql
+package api_schema
 
 import (
 	"geo-jot/auth"
@@ -109,7 +109,7 @@ var EmptyQuery = graphql.ObjectConfig{Name: "EmptyQuery", Fields: DescriptionFie
 var SchemaConfig = graphql.SchemaConfig{Query: graphql.NewObject(RootQuery), Mutation: graphql.NewObject(RootMutation)}
 var SchemaAuthConfig = graphql.SchemaConfig{Query: graphql.NewObject(EmptyQuery), Mutation: graphql.NewObject(AuthMutation)}
 
-func GetSchema(SchemaConfig graphql.SchemaConfig) *graphql.Schema {
+func CreateSchema(SchemaConfig graphql.SchemaConfig) *graphql.Schema {
 	schema, err := graphql.NewSchema(SchemaConfig)
 
 	if err != nil {
